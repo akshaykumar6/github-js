@@ -1,0 +1,20 @@
+{
+  "name": "github.js",
+  "main": "github.js",
+  "version": "0.0.1",
+  "homepage": "",
+  "authors": [
+    "Akshay Sharma <sharmakumar3092@gmail.com>"
+  ],
+  "description": "Javascript Plugin over Github APIs.",
+  "keywords": [
+    "github","Javascript","API","github-js","github.js"
+  ],
+  "license": "MIT",
+  "private": false,
+  
+  "dependencies": {
+    "underscore": "~1.6.0"
+  },
+  "devDependencies": {}
+}
