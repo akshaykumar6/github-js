@@ -147,10 +147,15 @@
  	height: 300px;
  	overflow-y: auto;
  }
+ .gt-time-cnt{
+ 	position: relative;
+ }
  .gt-time-str{
- 	margin: 0 5px;
  	color: #666;
  	font-size: 0.87rem;
+ 	position: absolute;
+ 	top: 5;
+ 	right: 10;
  }
  .gt-activity{
  	padding: 10px 5px;
@@ -159,26 +164,29 @@
  }
  .gt-no-activity{
  	padding: 10px 5px;
+ 	text-align: center;
  }
  .gt-activity .gt-avatar-cnt{
  	float: left;
  	width: 5%;
  	min-width: 30px;
+ 	padding: 5px;
  }
  .gt-activity .gt-usr-avatar{
  	width: 30px;
  	height: 30px;
  }
- .gt-avt-cnt{
+ .gt-act-cnt{
  	display: inline-block;
  	display: -moz-inline-stack;
  	float: left;
- 	width: 94%;
+ 	width: 91%;
+ 	padding: 5px;
  }
  .gt-clearfix{
  	clear: both;
  }
- .gt-avt-cnt p{
+ .gt-act-cnt p{
  	margin: 2px 0px;
  	color: #666;
  	font-size: 0.87rem;
@@ -188,7 +196,7 @@
  	display: block;
  	white-space: nowrap;
  }
- .gt-avt-cnt .pull-req-info{
+ .gt-act-cnt .pull-req-info{
  	display: inline-block;
  	padding: 3px 7px;
  	margin-top: 5px;

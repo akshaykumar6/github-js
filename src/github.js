@@ -34,13 +34,10 @@ var GitHub = (function () {
                           '<span class="gt-usr-dt">Following</span>'+
                           '</a>'+
                         '</div>'+
-                        
-                        
                       '</div>'+
                     '</div>',
 
     repoProfileTpl: '<div class="gt-usr-header gt-shadow">'+
-                      
                       '<div class="gt-usr-name">'+
                         '<span class="user-name"><%= name%></span>'+
                         '<a target="_blank" href="<%= owner.html_url%>">'+
@@ -69,8 +66,6 @@ var GitHub = (function () {
                           '<span class="gt-usr-dt">Forks</span>'+
                           '</a>'+
                         '</div>'+
-                        
-                        
                       '</div>'+
                     '</div>',
 
@@ -92,118 +87,40 @@ var GitHub = (function () {
                         '<span class="gt-org-repos"> Public Repositories</span>'+
                       '</div>'+
                     '</div>',
-    CommitCommentEvent: '<div class="gt-activity gt-issue-com-activity">'+
-                            '<div class="gt-avatar-cnt">'+
-                              '<img src="<%=actor.avatar_url%>" class="gt-usr-avatar">'+
-                            '</div>'+
-                            '<div class="gt-avt-cnt">'+
-                            '<%= userLink%> <span> commented on commit </span> <%= commentLink%>'+
-                            '<span title="<%= created_at%>" class="gt-time-str"><%= timeString%></span>'+
-                            '<p><%= payload.comment.body%></p>'+
-                            '</div>'+
-                            '<div class="gt-clearfix"></div>'+
-                       '</div>',
-    CreateEvent: '<div class="gt-activity gt-create-activity">'+
-                    '<%= userLink%> <span> created <%= payload.ref_type%> </span> <%= branchLink%> <span> at </span><%= repoLink%>'+
-                    '<span title="<%= created_at%>" class="gt-time-str"><%= timeString%></span>'+
-                '</div>',
-    DeleteEvent: '<div class="gt-activity gt-delete-activity">'+
-                    '<%= userLink%> <span> deleted </span> <%= payload.ref%> <%= payload.ref_type%> <span> at </span><%= repoLink%>'+
-                    '<span title="<%= created_at%>" class="gt-time-str"><%= timeString%></span>'+
-                '</div>',
-    ForkEvent: '<div class="gt-activity gt-fork-activity">'+
-                    '<%= userLink%> <span> forked </span> <%= repoLink%> <span> to </span><%= forkLink%>'+
-                    '<span title="<%= created_at%>" class="gt-time-str"><%= timeString%></span>'+
-                '</div>',
-    GollumEvent: '<div class="gt-activity gt-issue-com-activity">'+
-                    '<div class="gt-avatar-cnt">'+
-                      '<img src="<%=actor.avatar_url%>" class="gt-usr-avatar">'+
-                    '</div>'+
-                    '<div class="gt-avt-cnt">'+
-                    '<%= userLink%> <span> <%= actionType%> the <%= repoLink%> wiki</span>'+
-                    '<span title="<%= created_at%>" class="gt-time-str"><%= timeString%></span>'+
-                    '<p><%= wikiMessage%></p>'+
-                    '</div>'+
-                    '<div class="gt-clearfix"></div>'+
-               '</div>',
-    IssueCommentEvent: '<div class="gt-activity gt-issue-com-activity">'+
-                            '<div class="gt-avatar-cnt">'+
-                              '<img src="<%=actor.avatar_url%>" class="gt-usr-avatar">'+
-                            '</div>'+
-                            '<div class="gt-avt-cnt">'+
-                            '<%= userLink%> <span> commented on issue </span> <%= commentLink%>'+
-                            '<span title="<%= created_at%>" class="gt-time-str"><%= timeString%></span>'+
-                            '<p><%= payload.comment.body%></p>'+
-                            '</div>'+
-                            '<div class="gt-clearfix"></div>'+
-                       '</div>',
-    IssuesEvent: '<div class="gt-activity gt-issue-com-activity">'+
-                      '<div class="gt-avatar-cnt">'+
-                        '<img src="<%=actor.avatar_url%>" class="gt-usr-avatar">'+
-                      '</div>'+
-                      '<div class="gt-avt-cnt">'+
-                      '<%= userLink%> <span> <%= payload.action%> issue </span> <%= issueUrl%>'+
-                      '<span title="<%= created_at%>" class="gt-time-str"><%= timeString%></span>'+
-                      '</div>'+
-                      '<div class="gt-clearfix"></div>'+
-                 '</div>',
-    MemberEvent: '<div class="gt-activity gt-member-activity">'+
-                    '<%= userLink%> <span> added </span> <%= memberLink%> to <%= repoLink%>'+
-                    '<span title="<%= created_at%>" class="gt-time-str"><%= timeString%></span>'+
-                 '</div>',
-    PublicEvent: '<div class="gt-activity gt-public-activity">'+
-                    '<%= userLink%> <span> open sourced </span> <%= repoLink%>'+
-                    '<span title="<%= created_at%>" class="gt-time-str"><%= timeString%></span>'+
-                 '</div>',
-    PullRequestEvent: '<div class="gt-activity gt-pull-req-activity">'+
-                          '<div class="gt-avatar-cnt">'+
+    gitActivityTpl: '<div class="gt-activity <%=type%>">'+
+                        '<div class="gt-avatar-cnt">'+
+                          '<a target="_blank" href="https://github.com/<%= actor.login%>">'+
                             '<img src="<%=actor.avatar_url%>" class="gt-usr-avatar">'+
-                          '</div>'+
-                          '<div class="gt-avt-cnt">'+
-                            '<%= userLink%> <span> <%= payload.action%> pull request </span> <%= mergeRequestUrl%>'+
-                            '<span title="<%= created_at%>" class="gt-time-str"><%= timeString%></span>'+
-                            '<p><%= payload.pull_request.title%></p>'+
-                            '<p class="pull-req-info"><%= payload.pull_request.commits%> commits with <%= payload.pull_request.changed_files%> files changed.</p>'+
-                            '</div>'+
-                          '<div class="gt-clearfix"></div>'+
-                     '</div>',
-    PullRequestReviewCommentEvent: '<div class="gt-activity gt-pull-com-activity">'+
-                                        '<div class="gt-avatar-cnt">'+
-                                          '<img src="<%=actor.avatar_url%>" class="gt-usr-avatar">'+
-                                        '</div>'+
-                                        '<div class="gt-avt-cnt">'+
-                                        '<%= userLink%> <span> commented on pull request </span> <%= pullCommentUrl%>'+
-                                        '<span title="<%= created_at%>" class="gt-time-str"><%= timeString%></span>'+
-                                        '<p><%= payload.comment.body%></p>'+
-                                        '</div>'+
-                                        '<div class="gt-clearfix"></div>'+
-                                   '</div>',
-    PushEvent: '<div class="gt-activity gt-push-activity">'+
-                    '<div class="gt-avatar-cnt">'+
-                      '<img src="<%=actor.avatar_url%>" class="gt-usr-avatar">'+
-                    '</div>'+
-                    '<div class="gt-avt-cnt">'+
-                    '<%= userLink%> <span> pushed to </span> <%= branchLink%> <span> at </span> <%= repoLink%>'+
-                    '<span title="<%= created_at%>" class="gt-time-str"><%= timeString%></span>'+
-                    '<%= commitsHtml%>'+
-                    '</div>'+
-                    '<div class="gt-clearfix"></div>'+
-               '</div>',
-    ReleaseEvent: '<div class="gt-activity gt-issue-com-activity">'+
-                      '<div class="gt-avatar-cnt">'+
-                        '<img src="<%=actor.avatar_url%>" class="gt-usr-avatar">'+
-                      '</div>'+
-                      '<div class="gt-avt-cnt">'+
-                      '<%= userLink%> <span> released </span> <%= tagLink%> <span> at </span> <%= repoLink%>'+
-                      '<br><%= zipLink%>'+
-                      '<span title="<%= created_at%>" class="gt-time-str"><%= timeString%></span>'+
-                      '</div>'+
-                      '<div class="gt-clearfix"></div>'+
-                 '</div>',
-    WatchEvent: '<div class="gt-activity gt-watch-activity">'+
-                    '<%= userLink%> <span> starred </span> <%= repoLink%>'+
-                    '<span title="<%= created_at%>" class="gt-time-str"><%= timeString%></span>'+
-                '</div>',
+                          '</a>'+
+                        '</div>'+
+                        '<div class="gt-act-cnt">'+
+                            '<%= message%>'+
+                        '</div>'+
+                        '<div title="<%= created_at%>" class="gt-time-cnt"><div class="gt-time-str"><%= timeString%></div></div>'+
+                        '<div class="gt-clearfix"></div>'+
+                    '</div>',
+    CommitCommentEvent:'<%= userLink%> <span> commented on commit </span> <%= commentLink%>'+
+                       '<p><%= payload.comment.body%></p>',
+    CreateEvent: '<%= userLink%> <span> created <%= payload.ref_type%> </span> <%= branchLink%> <span> at </span><%= repoLink%>',
+    DeleteEvent: '<%= userLink%> <span> deleted </span> <%= payload.ref%> <%= payload.ref_type%> <span> at </span><%= repoLink%>',
+    ForkEvent:  '<%= userLink%> <span> forked </span> <%= repoLink%> <span> to </span><%= forkLink%>',
+    GollumEvent: '<%= userLink%> <span> <%= actionType%> the <%= repoLink%> wiki</span>'+
+                    '<p><%= wikiMessage%></p>',
+    IssueCommentEvent: '<%= userLink%> <span> commented on issue </span> <%= commentLink%>'+
+                            '<p><%= payload.comment.body%></p>',
+    IssuesEvent: '<%= userLink%> <span> <%= payload.action%> issue </span> <%= issueUrl%>',
+    MemberEvent: '<%= userLink%> <span> added </span> <%= memberLink%> to <%= repoLink%>',
+    PublicEvent: '<%= userLink%> <span> open sourced </span> <%= repoLink%>',
+    PullRequestEvent: '<%= userLink%> <span> <%= payload.action%> pull request </span> <%= mergeRequestUrl%>'+
+                      '<p><%= payload.pull_request.title%></p>'+
+                      '<p class="pull-req-info"><%= payload.pull_request.commits%> commits with <%= payload.pull_request.changed_files%> files changed.</p>',
+    PullRequestReviewCommentEvent: '<%= userLink%> <span> commented on pull request </span> <%= pullCommentUrl%>'+
+                                   '<p><%= payload.comment.body%></p>',
+    PushEvent: '<%= userLink%> <span> pushed to </span> <%= branchLink%> <span> at </span> <%= repoLink%>'+
+               '<%= commitsHtml%>',
+    ReleaseEvent: '<%= userLink%> <span> released </span> <%= tagLink%> <span> at </span> <%= repoLink%>'+
+                  '<br><%= zipLink%>',
+    WatchEvent: '<%= userLink%> <span> starred </span> <%= repoLink%>',
     noActivityTpl: '<div class="gt-no-activity">'+
                       '<span> There are no public events for this account in past 90 days. </span>'+
                    '</div>'
@@ -242,7 +159,8 @@ var GitHub = (function () {
 
       if (length==0) {
         html += gitMethods.getRenderedHTML(gitTemplates['noActivityTpl'],{});
-      } else{
+      } 
+      else{
         for(var index = 0; index < length; index++){
 
           var activity = data[index];
@@ -297,7 +215,8 @@ var GitHub = (function () {
                                 break;
           }
           
-          html += gitMethods.getRenderedHTML(gitTemplates[activity.type],activity);
+          activity.message = gitMethods.getRenderedHTML(gitTemplates[activity.type], activity);
+          html += gitMethods.getRenderedHTML(gitTemplates['gitActivityTpl'],activity);
 
         }
       }
