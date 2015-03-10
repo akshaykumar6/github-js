@@ -39,7 +39,7 @@
  	font-family: 'Source Sans Pro', sans-serif;
  	width: 100%;
  	background-color: #FFF;
- 	border-radius: 3px 3px 0 0;
+ 	border-radius: 3px;
  	border: 1px solid #D8D8D8;
  	background: #FAFAFA;
  	font-size: 1rem;
@@ -236,7 +236,6 @@
  	background: #F2F2F2;
  	border: 1px solid #E3E3E3;
  }
-
  .gt-scrollbar::-webkit-scrollbar-thumb:vertical:hover, .gt-scrollbar::-webkit-scrollbar-thumb:horizontal:hover {
  	background: #888;
  	opacity: 0.6;
@@ -246,4 +245,12 @@
  	display: block;
  	height: 50px;
  	opacity: 0.2;
+ }
+ .gt-org-img, .gt-usr-img{
+ 	background-repeat: no-repeat;
+ 	background-position: 60%;
+ 	border-radius: 50%;
+ 	width: 100px;
+ 	height: 100px;
+ 	background-size: 112%;
  }

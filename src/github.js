@@ -6,7 +6,7 @@ var GitHub = (function () {
     userProfileTpl: '<div class="gt-usr-header gt-shadow">'+
                       '<div class="gt-usr-avatar">'+
                         '<a target="_blank" href="<%= html_url%>">'+
-                          '<img class="gt-usr-img" src="<%= avatar_url%>">'+
+                          '<div class="gt-usr-img" style="background-image: url(<%= avatar_url%>)"> </div>'+
                         '</a>'+
                       '</div>'+
                       '<div class="gt-usr-name">'+
@@ -72,7 +72,7 @@ var GitHub = (function () {
     orgProfileTpl: '<div class="gt-org-header gt-shadow">'+
                       '<div class="gt-org-avatar">'+
                         '<a target="_blank" href="<%= html_url%>">'+
-                          '<img class="gt-org-img" src="<%= avatar_url%>">'+
+                          '<div class="gt-org-img" style="background-image: url(<%= avatar_url%>)"> </div>'+
                         '</a>'+
                       '</div>'+
                       '<div class="gt-org-name">'+
@@ -268,7 +268,6 @@ var GitHub = (function () {
       request.onload = function(e) {
         if (request.status >= 200 && request.status < 400){
           data = JSON.parse(request.responseText);
-          console.log(data);
           content = callback(data);
         } else {
           return false;
