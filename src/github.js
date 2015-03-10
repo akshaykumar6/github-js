@@ -264,7 +264,6 @@ var GitHub = (function () {
       var content, data, request;
       request = new XMLHttpRequest();
       request.open('GET', url, false);
-      request.setRequestHeader('Authorization', 'Token 1aca63367ba18ad5531199c2169e38dffd2e068c');
 
       request.onload = function(e) {
         if (request.status >= 200 && request.status < 400){
