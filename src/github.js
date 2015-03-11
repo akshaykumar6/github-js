@@ -113,7 +113,8 @@ var GitHub = (function () {
     PublicEvent: '<span> open sourced <%= repoLink%> </span>',
     PullRequestEvent: '<span> <%= payload.action%> pull request <%= mergeRequestUrl%> </span>'+
                       '<p><%= payload.pull_request.title%></p>'+
-                      '<p class="pull-req-info"><%= payload.pull_request.commits%> commits with <%= payload.pull_request.changed_files%> files changed.</p>',
+                      '<p class="pull-req-info"><%= payload.pull_request.commits%><%if(payload.pull_request.commits > 1){%> commits <%}else{%> commit <%}%> '+
+                      'with <%= payload.pull_request.changed_files%> <%if(payload.pull_request.commits > 1){%> files <%}else{%> file <%}%> changed.</p>',
     PullRequestReviewCommentEvent: '<span> commented on pull request <%= pullCommentUrl%> </span>'+
                                    '<p><%= payload.comment.body%></p>',
     PushEvent: '<span> pushed to <%= branchLink%> at <%= repoLink%> </span>'+
@@ -250,7 +251,7 @@ var GitHub = (function () {
         if (length === 2) {
           compareLink = gitMethods.getGitHubLink(activity.repo.name + '/compare/' + shaDiff, 'View comparison for these 2 commits &raquo;','gt-compare-link');
         } else if (length > 2) {
-          compareLink = gitMethods.getGitHubLink(activity.repo.name + '/compare/' + shaDiff, (length-2)+' more commits &raquo;','gt-compare-link');
+          compareLink = gitMethods.getGitHubLink(activity.repo.name + '/compare/' + shaDiff, (length-2)+' more ' + gitMethods.getPluralWord(length-2,'commit') + ' &raquo;','gt-compare-link');
         }
 
         html += '</ul>'
@@ -264,7 +265,7 @@ var GitHub = (function () {
       var content, data, request;
       request = new XMLHttpRequest();
       request.open('GET', url, false);
-      
+
       request.onload = function(e) {
         if (request.status >= 200 && request.status < 400){
           data = JSON.parse(request.responseText);
@@ -297,6 +298,12 @@ var GitHub = (function () {
       if (typeof(cssClass) === 'undefined')
         cssClass = '';
       return gitMethods.getLink('https://github.com/' + url, title, cssClass);
+    },
+
+    getPluralWord: function (count, word) {
+      //  Only for plurals ending with 's' 
+      if (count !== 1) return word + 's';
+      return word;
     },
 
     millisecondsToStr: function(milliseconds) {
