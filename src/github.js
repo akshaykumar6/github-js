@@ -94,33 +94,33 @@ var GitHub = (function () {
                           '</a>'+
                         '</div>'+
                         '<div class="gt-act-cnt">'+
-                            '<%= message%>'+
+                            '<%= userLink%>'+'<%= message%>'+
                         '</div>'+
                         '<div title="<%= created_at%>" class="gt-time-cnt"><div class="gt-time-str"><%= timeString%></div></div>'+
                         '<div class="gt-clearfix"></div>'+
                     '</div>',
-    CommitCommentEvent:'<%= userLink%> <span> commented on commit </span> <%= commentLink%>'+
+    CommitCommentEvent:'<span> commented on commit <%= commentLink%> </span>'+
                        '<p><%= payload.comment.body%></p>',
-    CreateEvent: '<%= userLink%> <span> created <%= payload.ref_type%> </span> <%= branchLink%> <span> at </span><%= repoLink%>',
-    DeleteEvent: '<%= userLink%> <span> deleted </span> <%= payload.ref%> <%= payload.ref_type%> <span> at </span><%= repoLink%>',
-    ForkEvent:  '<%= userLink%> <span> forked </span> <%= repoLink%> <span> to </span><%= forkLink%>',
-    GollumEvent: '<%= userLink%> <span> <%= actionType%> the <%= repoLink%> wiki</span>'+
+    CreateEvent: '<span> created <%= payload.ref_type%> <%= branchLink%> at <%= repoLink%> </span>',
+    DeleteEvent: '<span> deleted <%= payload.ref%> <%= payload.ref_type%> at <%= repoLink%> </span>',
+    ForkEvent:  '<span> forked <%= repoLink%> to <%= forkLink%> </span>',
+    GollumEvent: '<span> <%= actionType%> the <%= repoLink%> wiki</span>'+
                     '<p><%= wikiMessage%></p>',
-    IssueCommentEvent: '<%= userLink%> <span> commented on issue </span> <%= commentLink%>'+
+    IssueCommentEvent: '<span> commented on issue <%= commentLink%> </span>'+
                             '<p><%= payload.comment.body%></p>',
-    IssuesEvent: '<%= userLink%> <span> <%= payload.action%> issue </span> <%= issueUrl%>',
-    MemberEvent: '<%= userLink%> <span> added </span> <%= memberLink%> to <%= repoLink%>',
-    PublicEvent: '<%= userLink%> <span> open sourced </span> <%= repoLink%>',
-    PullRequestEvent: '<%= userLink%> <span> <%= payload.action%> pull request </span> <%= mergeRequestUrl%>'+
+    IssuesEvent: '<span> <%= payload.action%> issue <%= issueUrl%> </span>',
+    MemberEvent: '<span> added <%= memberLink%> to <%= repoLink%> </span>',
+    PublicEvent: '<span> open sourced <%= repoLink%> </span>',
+    PullRequestEvent: '<span> <%= payload.action%> pull request <%= mergeRequestUrl%> </span>'+
                       '<p><%= payload.pull_request.title%></p>'+
                       '<p class="pull-req-info"><%= payload.pull_request.commits%> commits with <%= payload.pull_request.changed_files%> files changed.</p>',
-    PullRequestReviewCommentEvent: '<%= userLink%> <span> commented on pull request </span> <%= pullCommentUrl%>'+
+    PullRequestReviewCommentEvent: '<span> commented on pull request <%= pullCommentUrl%> </span>'+
                                    '<p><%= payload.comment.body%></p>',
-    PushEvent: '<%= userLink%> <span> pushed to </span> <%= branchLink%> <span> at </span> <%= repoLink%>'+
+    PushEvent: '<span> pushed to <%= branchLink%> at <%= repoLink%> </span>'+
                '<%= commitsHtml%>',
-    ReleaseEvent: '<%= userLink%> <span> released </span> <%= tagLink%> <span> at </span> <%= repoLink%>'+
+    ReleaseEvent: '<span> released <%= tagLink%> at <%= repoLink%> </span>'+
                   '<br><%= zipLink%>',
-    WatchEvent: '<%= userLink%> <span> starred </span> <%= repoLink%>',
+    WatchEvent: '<span> starred <%= repoLink%> </span>',
     noActivityTpl: '<div class="gt-no-activity">'+
                       '<span> There are no public events for this account in past 90 days. </span>'+
                    '</div>'
@@ -264,7 +264,7 @@ var GitHub = (function () {
       var content, data, request;
       request = new XMLHttpRequest();
       request.open('GET', url, false);
-
+      
       request.onload = function(e) {
         if (request.status >= 200 && request.status < 400){
           data = JSON.parse(request.responseText);
