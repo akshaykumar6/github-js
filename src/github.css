@@ -148,14 +148,11 @@
  	overflow-y: auto;
  }
  .gt-time-cnt{
- 	position: relative;
+ 	
  }
  .gt-time-str{
  	color: #666;
  	font-size: 0.87rem;
- 	position: absolute;
- 	top: 5;
- 	right: 10;
  }
  .gt-activity{
  	padding: 10px 5px;
@@ -170,7 +167,8 @@
  	float: left;
  	width: 5%;
  	min-width: 30px;
- 	padding: 5px;
+ 	padding-left: 5px;
+ 	padding-bottom: 5px;
  }
  .gt-activity .gt-usr-avatar{
  	width: 30px;
@@ -181,7 +179,7 @@
  	display: -moz-inline-stack;
  	float: left;
  	width: 91%;
- 	padding: 5px;
+ 	padding-left: 5px;
  }
  .gt-clearfix{
  	clear: both;

@@ -2,6 +2,8 @@ var GitHub = (function () {
 
   var gitObj = {};
 
+  var gitApiUrl = 'https://api.github.com/';
+
   var gitTemplates = {
     userProfileTpl: '<div class="gt-usr-header gt-shadow">'+
                       '<div class="gt-usr-avatar">'+
@@ -94,9 +96,9 @@ var GitHub = (function () {
                           '</a>'+
                         '</div>'+
                         '<div class="gt-act-cnt">'+
+                            '<div title="<%= created_at%>" class="gt-time-cnt"><div class="gt-time-str"><%= timeString%></div></div>'+
                             '<%= userLink%>'+'<%= message%>'+
                         '</div>'+
-                        '<div title="<%= created_at%>" class="gt-time-cnt"><div class="gt-time-str"><%= timeString%></div></div>'+
                         '<div class="gt-clearfix"></div>'+
                     '</div>',
     CommitCommentEvent:'<span> commented on commit <%= commentLink%> </span>'+
@@ -124,6 +126,9 @@ var GitHub = (function () {
     WatchEvent: '<span> starred <%= repoLink%> </span>',
     noActivityTpl: '<div class="gt-no-activity">'+
                       '<span> There are no public events for this account in past 90 days. </span>'+
+                   '</div>',
+    notFoundTpl: '<div class="gt-no-activity">'+
+                      '<span> This account does not exist. </span>'+
                    '</div>'
   };
 
@@ -138,19 +143,33 @@ var GitHub = (function () {
     },
 
     getRenderedHTML: function (template, data) {
-      return _.template(template)(data);
+      if (data) {
+        return _.template(template)(data);
+      } else{
+        return _.template(template)();
+      }
     },
 
-    getUserProfileHTML: function (data){
-      return gitMethods.getRenderedHTML(gitTemplates.userProfileTpl, data);
+    getUserProfileHTML: function (username){
+      
+      var userUrl = gitApiUrl + 'users/' + username;
+      return  gitMethods.getData(userUrl, function(data){
+        return gitMethods.getRenderedHTML(gitTemplates.userProfileTpl, data);
+      });
     },
 
-    getRepoProfileHTML: function (data){
+    getRepoProfileHTML: function (username, reponame){
+      var repoUrl = gitApiUrl + 'repos/' + username +'/'+ reponame;
+      return  gitMethods.getData(repoUrl, function(data){
         return gitMethods.getRenderedHTML(gitTemplates.repoProfileTpl, data);
+      });
     },
 
-    getOrgProfileHTML: function (data){
+    getOrgProfileHTML: function (orgname){
+      var orgUrl = gitApiUrl + 'orgs/' + orgname;
+      return  gitMethods.getData(orgUrl, function(data){
         return gitMethods.getRenderedHTML(gitTemplates.orgProfileTpl, data);
+      });
     },
 
     getPublicActivityHTML: function (data) {
@@ -159,7 +178,7 @@ var GitHub = (function () {
       var length = (gitMethods.activityLimit < data.length)? gitMethods.activityLimit : data.length;
 
       if (length==0) {
-        html += gitMethods.getRenderedHTML(gitTemplates['noActivityTpl'],{});
+        html += gitMethods.getRenderedHTML(gitTemplates['noActivityTpl']);
       } 
       else{
         for(var index = 0; index < length; index++){
@@ -265,7 +284,7 @@ var GitHub = (function () {
       var content, data, request;
       request = new XMLHttpRequest();
       request.open('GET', url, false);
-
+      
       request.onload = function(e) {
         if (request.status >= 200 && request.status < 400){
           data = JSON.parse(request.responseText);
@@ -344,6 +363,16 @@ var GitHub = (function () {
           selectorDivs[i].style.position = 'relative';
         }
       }
+    },
+
+    setLimit: function(value){
+      var limit;
+      if (value !== 'undefined' && gitMethods.checkInteger(limit = parseInt(value, 10))) {
+        gitMethods.activityLimit = (limit>30)?30:limit;
+      } 
+      else {
+        gitMethods.activityLimit = 30;
+      }
     }
 
   };
@@ -354,15 +383,16 @@ var GitHub = (function () {
       return false;
     }
 
-    var selector = options.classname,
-    userUrl   = 'https://api.github.com/users/' + options.username,
+    var parentCnt = '';
 
-    parentCnt = '';
+    var userHtml = gitMethods.getUserProfileHTML(options.username);
+    if (userHtml) {
+      parentCnt += userHtml;
+    } else{
+      parentCnt += gitMethods.getRenderedHTML(gitTemplates.notFoundTpl)
+    }
 
-    var userHtml = gitMethods.getData(userUrl, gitMethods.getUserProfileHTML);
-    parentCnt = userHtml;
-
-    gitMethods.renderContent(parentCnt, selector);
+    gitMethods.renderContent(parentCnt, options.classname);
 
   };
 
@@ -372,15 +402,16 @@ var GitHub = (function () {
       return false;
     }
 
-    var selector = options.classname,
-    userUrl   = 'https://api.github.com/repos/' + options.username +'/'+ options.reponame,
+    var parentCnt = '';
 
-    parentCnt = '';
+    var repoHtml = gitMethods.getRepoProfileHTML(options.username, options.reponame);
+    if (repoHtml) {
+      parentCnt += repoHtml;
+    } else{
+      parentCnt += gitMethods.getRenderedHTML(gitTemplates.notFoundTpl)
+    }
 
-    var repoHtml = gitMethods.getData(userUrl, gitMethods.getRepoProfileHTML);
-    parentCnt = repoHtml;
-
-    gitMethods.renderContent(parentCnt, selector);
+    gitMethods.renderContent(parentCnt, options.classname);
 
   };
 
@@ -390,13 +421,16 @@ var GitHub = (function () {
       return false;
     }
 
-    var selector = options.classname,
-    userUrl   = 'https://api.github.com/orgs/' + options.orgname;
-    parentCnt = '';
+    var parentCnt = '';
 
-    var orgHtml = gitMethods.getData(userUrl, gitMethods.getOrgProfileHTML);
-    parentCnt = orgHtml;
-    gitMethods.renderContent(parentCnt, selector);
+    var orgHtml = gitMethods.getOrgProfileHTML(options.orgname);
+    if (orgHtml) {
+      parentCnt += orgHtml;
+    } else{
+      parentCnt += gitMethods.getRenderedHTML(gitTemplates.notFoundTpl)
+    }
+
+    gitMethods.renderContent(parentCnt, options.classname);
     
   };
 
@@ -406,27 +440,20 @@ var GitHub = (function () {
       return false;
     }
 
-    var selector = options.classname,
-    userUrl   = 'https://api.github.com/users/' + options.username,
-    eventsUrl = userUrl + '/events',
-    parentCnt = '',
-    userHtml = '',
-    eventHtml = '';
+    gitMethods.setLimit(options.limit);
+    var eventsUrl = gitApiUrl + 'users/' + options.username + '/events',
+    parentCnt = '';
 
-    var userHtml = gitMethods.getData(userUrl, gitMethods.getUserProfileHTML);
-
-    var limit;
-    if (options.limit !== 'undefined' && gitMethods.checkInteger(limit = parseInt(options.limit, 10))) {
-      gitMethods.activityLimit = (limit>30)?30:limit;
-    } 
-    else {
-      gitMethods.activityLimit = 30;
+    var userHtml = gitMethods.getUserProfileHTML(options.username);
+    if (userHtml) {
+      parentCnt += userHtml;
+      eventHtml = gitMethods.getData(eventsUrl, gitMethods.getPublicActivityHTML);
+      parentCnt += eventHtml;
+    } else{
+      parentCnt += gitMethods.getRenderedHTML(gitTemplates.notFoundTpl)
     }
 
-    var eventHtml = gitMethods.getData(eventsUrl, gitMethods.getPublicActivityHTML);
-
-    parentCnt = userHtml + eventHtml;
-    gitMethods.renderContent(parentCnt, selector);
+    gitMethods.renderContent(parentCnt, options.classname);
 
   };
 
@@ -436,27 +463,20 @@ var GitHub = (function () {
       return false;
     }
 
-    var selector = options.classname,
-    repoUrl   = 'https://api.github.com/repos/' + options.username +'/'+ options.reponame,
-    eventsUrl = 'https://api.github.com/repos/'+ options.username + '/' + options.reponame + '/events',
-    parentCnt = '',
-    userHtml = '',
-    eventHtml = '';
+    gitMethods.setLimit(options.limit);
+    var eventsUrl = gitApiUrl + 'repos/' + options.username + '/' + options.reponame + '/events',
+    parentCnt = '';
 
-    var repoHtml = gitMethods.getData(repoUrl, gitMethods.getRepoProfileHTML);
-
-    var limit;
-    if (options.limit !== 'undefined' && gitMethods.checkInteger(limit = parseInt(options.limit, 10))) {
-      gitMethods.activityLimit = (limit>30)?30:limit;
-    } 
-    else {
-      gitMethods.activityLimit = 30;
+    var repoHtml = gitMethods.getRepoProfileHTML(options.username, options.reponame);
+    if (repoHtml) {
+      parentCnt += repoHtml;
+      eventHtml = gitMethods.getData(eventsUrl, gitMethods.getPublicActivityHTML);
+      parentCnt += eventHtml;
+    } else{
+      parentCnt += gitMethods.getRenderedHTML(gitTemplates.notFoundTpl)
     }
 
-    var eventHtml = gitMethods.getData(eventsUrl, gitMethods.getPublicActivityHTML);
-
-    parentCnt = repoHtml + eventHtml;
-    gitMethods.renderContent(parentCnt, selector);
+    gitMethods.renderContent(parentCnt, options.classname);
 
   };
 
@@ -466,27 +486,20 @@ var GitHub = (function () {
       return false;
     }
 
-    var selector = options.classname,
-    userUrl   = 'https://api.github.com/orgs/' + options.orgname,
-    eventsUrl = 'https://api.github.com/orgs/'+ options.orgname + '/events';
-
+    gitMethods.setLimit(options.limit);
+    var eventsUrl =  gitApiUrl + 'orgs/' + options.orgname + '/events',
     parentCnt = '';
 
-    var orgHtml = gitMethods.getData(userUrl, gitMethods.getOrgProfileHTML);
-    
-    var limit;
-    if (options.limit !== 'undefined' && gitMethods.checkInteger(limit = parseInt(options.limit, 10))) {
-      gitMethods.activityLimit = (limit>30)?30:limit;
-    } 
-    else {
-      gitMethods.activityLimit = 30;
+    var orgHtml = gitMethods.getOrgProfileHTML(options.orgname);
+    if (orgHtml) {
+      parentCnt += orgHtml;
+      eventHtml = gitMethods.getData(eventsUrl, gitMethods.getPublicActivityHTML);
+      parentCnt += eventHtml;
+    } else{
+      parentCnt += gitMethods.getRenderedHTML(gitTemplates.notFoundTpl)
     }
 
-    var eventHtml = gitMethods.getData(eventsUrl, gitMethods.getPublicActivityHTML);
-
-    parentCnt = orgHtml + eventHtml;
-
-    gitMethods.renderContent(parentCnt, selector);
+    gitMethods.renderContent(parentCnt, options.classname);
 
   };
 
