@@ -94,7 +94,7 @@
  	text-decoration: underline;
  }
  .gt-usr-details{
- 	height: 50px;
+ 	height: 60px;
  }
  .gt-usr-repo,.gt-usr-folwr,.gt-usr-folng{
  	float: left;
@@ -251,4 +251,50 @@
  	width: 100px;
  	height: 100px;
  	background-size: 112%;
+ }
+ .gt-repo-lg-stat{
+ 	width: 100%;
+ 	height: 10px;
+ 	clear: both;
+ 	background-color: #38AFB9;
+ }
+ .gt-repo-lg-cnt{
+ 	position: relative;
+ 	float: left;
+ 	height: 100%;
+ }
+ .gt-repo-lg-name{
+ 	height: 100%;
+ 	position: relative;
+ }
+ .gt-repo-lg-name[data-title]:hover:after{
+ 	content: attr(data-title);
+ 	font-size: 12px;
+ 	padding: 2px 8px;
+ 	color: white;
+ 	position: absolute;
+ 	left: 40%;
+ 	top: 175%;
+ 	white-space: nowrap;
+ 	z-index: 200;
+ 	-moz-border-radius: 5px;
+ 	-webkit-border-radius: 5px;
+ 	border-radius: 5px;
+ 	background-color: #222;
+ }
+
+ .gt-repo-lg-name:hover:before {
+ 	border-bottom-color: #222;
+ 	border-width: 5px;
+ 	left: 45%;
+ }
+ .gt-repo-lg-name:before {
+ 	border: solid transparent;
+ 	content: " ";
+ 	height: 0;
+ 	width: 0;
+ 	position: absolute;
+ 	pointer-events: none;
+ 	top: 70%;
+ 	z-index: 201;
  }

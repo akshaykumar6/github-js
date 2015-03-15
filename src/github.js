@@ -68,6 +68,9 @@ var GitHub = (function () {
                           '<span class="gt-usr-dt">Forks</span>'+
                           '</a>'+
                         '</div>'+
+                        '<div class="gt-repo-lg-stat">'+
+                          '<%= languageHtml %>'+
+                        '</div>'+
                       '</div>'+
                     '</div>',
 
@@ -160,7 +163,11 @@ var GitHub = (function () {
 
     getRepoProfileHTML: function (username, reponame){
       var repoUrl = gitApiUrl + 'repos/' + username +'/'+ reponame;
+      var languageUrl = repoUrl + '/languages';
+      var languageHtml = gitMethods.getData(languageUrl, gitMethods.getLanguageHTML);
+      
       return  gitMethods.getData(repoUrl, function(data){
+        data.languageHtml = languageHtml;
         return gitMethods.getRenderedHTML(gitTemplates.repoProfileTpl, data);
       });
     },
@@ -323,6 +330,36 @@ var GitHub = (function () {
       //  Only for plurals ending with 's' 
       if (count !== 1) return word + 's';
       return word;
+    },
+
+    getLanguageHTML: function(data){
+
+      var languageData = [], sum = 0,
+      percentage, languageHtml = '';
+
+       _.each(data, function(value, key){ 
+          var data = {};
+          data.language = key;
+          data.size = value;
+          languageData.push(data);
+          sum += value; 
+      });
+
+      languageData = languageData.sort(function(a, b){return b.size - a.size});
+
+      _.each(languageData, function(element){
+
+          percentage = (parseInt(element.size)/sum*100).toFixed(1);
+          languageHtml +='<div class="gt-repo-lg-cnt" style="width: '+ percentage +'%; background: #'+ gitMethods.getRandomColor() +'; " >'+
+                 ' <div class="gt-repo-lg-name" data-title="'+ element.language +' ('+ percentage +'%)"> </div> </div>';
+      });
+      
+      return languageHtml;
+    },
+
+    getRandomColor: function(){
+
+      return Math.random().toString(16).substring(2, 8);
     },
 
     millisecondsToStr: function(milliseconds) {
