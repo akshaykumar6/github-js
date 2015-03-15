@@ -355,14 +355,14 @@ var GitHub = (function () {
 
     renderContent: function(content, selector){
       
-      var selectorDivs = document.getElementsByClassName(selector);
+      var selectorDivs = document.querySelectorAll(selector);
       content = '<div class="gt-container">'+content+'</div>';
-      if (selectorDivs instanceof HTMLCollection) {
-        for (var i = 0; i < selectorDivs.length; i++) {
-          selectorDivs[i].innerHTML = content;
-          selectorDivs[i].style.position = 'relative';
-        }
+      
+      for (var i = 0; i < selectorDivs.length; i++) {
+        selectorDivs[i].innerHTML = content;
+        selectorDivs[i].style.position = 'relative';
       }
+      
     },
 
     setLimit: function(value){
@@ -379,7 +379,7 @@ var GitHub = (function () {
 
   gitObj.userProfile = function (options) {
 
-    if (!options.username || !options.classname) {
+    if (!options.username || !options.selector) {
       return false;
     }
 
@@ -392,13 +392,13 @@ var GitHub = (function () {
       parentCnt += gitMethods.getRenderedHTML(gitTemplates.notFoundTpl)
     }
 
-    gitMethods.renderContent(parentCnt, options.classname);
+    gitMethods.renderContent(parentCnt, options.selector);
 
   };
 
   gitObj.repoProfile = function (options) {
 
-    if (!options.username || !options.classname || !options.reponame) {
+    if (!options.username || !options.selector || !options.reponame) {
       return false;
     }
 
@@ -411,13 +411,13 @@ var GitHub = (function () {
       parentCnt += gitMethods.getRenderedHTML(gitTemplates.notFoundTpl)
     }
 
-    gitMethods.renderContent(parentCnt, options.classname);
+    gitMethods.renderContent(parentCnt, options.selector);
 
   };
 
   gitObj.orgProfile = function (options) {
 
-    if (!options.orgname || !options.classname) {
+    if (!options.orgname || !options.selector) {
       return false;
     }
 
@@ -430,13 +430,13 @@ var GitHub = (function () {
       parentCnt += gitMethods.getRenderedHTML(gitTemplates.notFoundTpl)
     }
 
-    gitMethods.renderContent(parentCnt, options.classname);
+    gitMethods.renderContent(parentCnt, options.selector);
     
   };
 
   gitObj.userActivity = function (options) {
 
-    if (!options.username || !options.classname) {
+    if (!options.username || !options.selector) {
       return false;
     }
 
@@ -453,13 +453,13 @@ var GitHub = (function () {
       parentCnt += gitMethods.getRenderedHTML(gitTemplates.notFoundTpl)
     }
 
-    gitMethods.renderContent(parentCnt, options.classname);
+    gitMethods.renderContent(parentCnt, options.selector);
 
   };
 
   gitObj.repoActivity = function (options) {
 
-    if (!options.username || !options.classname || !options.reponame) {
+    if (!options.username || !options.selector || !options.reponame) {
       return false;
     }
 
@@ -476,13 +476,13 @@ var GitHub = (function () {
       parentCnt += gitMethods.getRenderedHTML(gitTemplates.notFoundTpl)
     }
 
-    gitMethods.renderContent(parentCnt, options.classname);
+    gitMethods.renderContent(parentCnt, options.selector);
 
   };
 
   gitObj.orgActivity = function (options) {
 
-    if (!options.orgname || !options.classname) {
+    if (!options.orgname || !options.selector) {
       return false;
     }
 
@@ -499,7 +499,7 @@ var GitHub = (function () {
       parentCnt += gitMethods.getRenderedHTML(gitTemplates.notFoundTpl)
     }
 
-    gitMethods.renderContent(parentCnt, options.classname);
+    gitMethods.renderContent(parentCnt, options.selector);
 
   };
 
