@@ -12,9 +12,13 @@
   ],
   "license": "MIT",
   "private": false,
-  
+  "ignore": [
+    "node_modules",
+    "bower_components",
+    "test"
+  ],
   "dependencies": {
-    "underscore": "~1.6.0"
+    "underscore": "~1.8.0"
   },
   "devDependencies": {}
 }
