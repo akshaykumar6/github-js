@@ -139,6 +139,7 @@ var GitHub = (function () {
   var gitMethods = {
 
     checkInteger: function (value) {
+      // Check if value is integer
       if (value === parseInt(value, 10))
         return true;
       else 
@@ -146,6 +147,7 @@ var GitHub = (function () {
     },
 
     getRenderedHTML: function (template, data) {
+      // Get the rendered template with data
       if (data) {
         return _.template(template)(data);
       } else{
@@ -154,7 +156,7 @@ var GitHub = (function () {
     },
 
     getUserProfileHTML: function (username){
-      
+      // Get User profile HTML
       var userUrl = gitApiUrl + 'users/' + username;
       return  gitMethods.getData(userUrl, function(data){
         return gitMethods.getRenderedHTML(gitTemplates.userProfileTpl, data);
@@ -162,6 +164,7 @@ var GitHub = (function () {
     },
 
     getRepoProfileHTML: function (username, reponame){
+      // Get the repository profile HTML with language stats
       var repoUrl = gitApiUrl + 'repos/' + username +'/'+ reponame;
       var languageUrl = repoUrl + '/languages';
       var languageHtml = gitMethods.getData(languageUrl, gitMethods.getLanguageHTML);
@@ -173,6 +176,7 @@ var GitHub = (function () {
     },
 
     getOrgProfileHTML: function (orgname){
+      // Get organization profile HTML
       var orgUrl = gitApiUrl + 'orgs/' + orgname;
       return  gitMethods.getData(orgUrl, function(data){
         return gitMethods.getRenderedHTML(gitTemplates.orgProfileTpl, data);
@@ -180,18 +184,20 @@ var GitHub = (function () {
     },
 
     getPublicActivityHTML: function (data) {
-      
+      // Get all the public activities of user/repo/organization
       var html = '<div class="gt-activity-cnt gt-scrollbar">';
       var length = (gitMethods.activityLimit < data.length)? gitMethods.activityLimit : data.length;
 
       if (length==0) {
+        // If no activity in last 90 days
         html += gitMethods.getRenderedHTML(gitTemplates['noActivityTpl']);
       } 
       else{
+        // Loop over all the activities
         for(var index = 0; index < length; index++){
-
           var activity = data[index];
           var payload = activity.payload;
+          // Get attributes common to all activities
           activity.timeString = gitMethods.millisecondsToStr(new Date() - new Date(activity.created_at));
           activity.userLink = gitMethods.getGitHubLink(activity.actor.login, activity.actor.login);
           activity.repoLink = gitMethods.getGitHubLink(activity.repo.name, activity.repo.name);
@@ -207,6 +213,7 @@ var GitHub = (function () {
             activity.branchLink = gitMethods.getGitHubLink(activity.repo.name + '/tree/' + activity.branch, activity.branch);
           }
 
+          // Get the HTML of selected activity type
           switch(activity.type){
             case 'CommitCommentEvent': activity.commentLink = gitMethods.getLink(payload.comment.html_url, activity.repo.name + '@' +payload.comment.commit_id.substring(0,6));
                                 break;
@@ -241,7 +248,7 @@ var GitHub = (function () {
             case 'WatchEvent':  
                                 break;
           }
-          
+          // Get activity specific message
           activity.message = gitMethods.getRenderedHTML(gitTemplates[activity.type], activity);
           html += gitMethods.getRenderedHTML(gitTemplates['gitActivityTpl'],activity);
 
@@ -253,7 +260,7 @@ var GitHub = (function () {
     },
 
     getCommitsHTML: function(activity){
-
+        // Form HTML for commits in PushEvent
         var html = '<ul class="gt-commit-list">';
         var liElement, shaLink, commitMessage,  commit, index,
         compareLink = '',
@@ -262,7 +269,7 @@ var GitHub = (function () {
         shaDiff = payload.before + '...' + payload.head;
         
         for(index = 0; index < length; index++){
-
+              // Get links for 2 or less commit
               if (index>1) break;
               commit = payload.commits[index];
               liElement = '<li class="gt-commit-item" >';
@@ -274,6 +281,7 @@ var GitHub = (function () {
               html += liElement;
         }
         
+        // Get the diff link between commits
         if (length === 2) {
           compareLink = gitMethods.getGitHubLink(activity.repo.name + '/compare/' + shaDiff, 'View comparison for these 2 commits &raquo;','gt-compare-link');
         } else if (length > 2) {
@@ -287,7 +295,7 @@ var GitHub = (function () {
     },
 
     getData: function(url, callback){
-
+      // Utility for synchronous AJAX calls
       var content, data, request;
       request = new XMLHttpRequest();
       request.open('GET', url, false);
@@ -309,7 +317,7 @@ var GitHub = (function () {
     },
 
     getLink: function(url, title, cssClass) {
-
+      // Get anchor tag HTML for URL
       if (!title)
         title = url;
       if (typeof(cssClass) === 'undefined')
@@ -318,7 +326,7 @@ var GitHub = (function () {
     },
 
     getGitHubLink: function(url, title, cssClass) {
-
+      // Get anchor tag HTML for non-github URL
       if (!title)
         title = url;
       if (typeof(cssClass) === 'undefined')
@@ -333,11 +341,11 @@ var GitHub = (function () {
     },
 
     getLanguageHTML: function(data){
-
+      // Get repository language stat HTML
       var languageData = [], sum = 0,
       percentage, languageHtml = '';
 
-       _.each(data, function(value, key){ 
+      _.each(data, function(value, key){ 
           var data = {};
           data.language = key;
           data.size = value;
@@ -345,10 +353,11 @@ var GitHub = (function () {
           sum += value; 
       });
 
+      // Sort languages by usage in repo 
       languageData = languageData.sort(function(a, b){return b.size - a.size});
 
       _.each(languageData, function(element){
-
+          // Get HTML for each language
           percentage = (parseInt(element.size)/sum*100).toFixed(1);
           languageHtml +='<div class="gt-repo-lg-cnt" style="width: '+ percentage +'%; background: #'+ gitMethods.getRandomColor() +'; " >'+
                  ' <div class="gt-repo-lg-name" data-title="'+ element.language +' ('+ percentage +'%)"> </div> </div>';
@@ -358,12 +367,12 @@ var GitHub = (function () {
     },
 
     getRandomColor: function(){
-
+      // Get random HEX code for color
       return Math.random().toString(16).substring(2, 8);
     },
 
     millisecondsToStr: function(milliseconds) {
-
+      // Convert milliseconds to time string
       function numberEnding(number) {
         return (number > 1) ? 's ago' : ' ago';
       }
@@ -391,7 +400,7 @@ var GitHub = (function () {
     },
 
     renderContent: function(content, selector){
-      
+      // render the content to the selector
       var selectorDivs = document.querySelectorAll(selector);
       content = '<div class="gt-container">'+content+'</div>';
       
@@ -403,6 +412,7 @@ var GitHub = (function () {
     },
 
     setLimit: function(value){
+      // Set render limit for activities - default is 30
       var limit;
       if (value !== 'undefined' && gitMethods.checkInteger(limit = parseInt(value, 10))) {
         gitMethods.activityLimit = (limit>30)?30:limit;
@@ -414,6 +424,10 @@ var GitHub = (function () {
 
   };
 
+  /**
+   * userProfile - render's the github user details to selector
+   * @param  {[JSON]} options [username, selector]
+   */
   gitObj.userProfile = function (options) {
 
     if (!options.username || !options.selector) {
@@ -432,7 +446,10 @@ var GitHub = (function () {
     gitMethods.renderContent(parentCnt, options.selector);
 
   };
-
+  /**
+   * repoProfile - render's the github repo details to selector
+   * @param  {[JSON]} options [username, reponame, selector]
+   */
   gitObj.repoProfile = function (options) {
 
     if (!options.username || !options.selector || !options.reponame) {
@@ -451,7 +468,10 @@ var GitHub = (function () {
     gitMethods.renderContent(parentCnt, options.selector);
 
   };
-
+  /**
+  * orgProfile - render's the github organization details to selector
+  * @param  {[JSON]} options [orgname, selector]
+  */
   gitObj.orgProfile = function (options) {
 
     if (!options.orgname || !options.selector) {
@@ -470,7 +490,10 @@ var GitHub = (function () {
     gitMethods.renderContent(parentCnt, options.selector);
     
   };
-
+  /**
+  * userActivity - render's the github user activity to selector
+  * @param  {[JSON]} options [username, selector and limit (optional)]
+  */
   gitObj.userActivity = function (options) {
 
     if (!options.username || !options.selector) {
@@ -493,7 +516,10 @@ var GitHub = (function () {
     gitMethods.renderContent(parentCnt, options.selector);
 
   };
-
+  /**
+  * repoActivity - render's the github repository activity to selector
+  * @param  {[JSON]} options [username, reponame, selector and limit (optional)]
+  */
   gitObj.repoActivity = function (options) {
 
     if (!options.username || !options.selector || !options.reponame) {
@@ -516,7 +542,10 @@ var GitHub = (function () {
     gitMethods.renderContent(parentCnt, options.selector);
 
   };
-
+  /**
+  * orgActivity - render's the github organization activity to selector
+  * @param  {[JSON]} options [orgname, selector and limit (optional)]
+  */
   gitObj.orgActivity = function (options) {
 
     if (!options.orgname || !options.selector) {
