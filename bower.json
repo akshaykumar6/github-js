@@ -13,12 +13,11 @@
   "license": "MIT",
   "private": false,
   "ignore": [
-    "node_modules",
-    "bower_components",
-    "test"
+    "src",
+    ".gitignore"
   ],
   "dependencies": {
-    "underscore": "~1.8.0"
+    "underscore": "~1.6.0"
   },
   "devDependencies": {}
 }
