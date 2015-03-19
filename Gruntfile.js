@@ -20,7 +20,7 @@ module.exports = function(grunt) {
           banner: config.banner
         },
         files: {
-          '<%= config.dist %>/github-<%= project.version %>.min.css': [
+          '<%= config.dist %>/github.min.css': [
             '<%= config.src %>/github.css'
           ]
         }
@@ -32,7 +32,7 @@ module.exports = function(grunt) {
       },
       dist: {
         files: {
-          '<%= config.dist %>/github-<%= project.version %>.min.js': [
+          '<%= config.dist %>/github.min.js': [
             '<%= config.src %>/github.js'
           ],
           '<%= config.dist %>/underscore/underscore.min.js': [
