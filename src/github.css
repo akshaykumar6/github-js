@@ -3,26 +3,7 @@
  */
  @import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,900);
 
- @media (max-width: 768px) {
- 	.gt-container{
- 		font-size: 70% !important;
- 	}
- }
- @media (min-width: 768px) {
- 	.gt-container{
- 		font-size: 80% !important;
- 	}
- }
- @media (min-width: 992px) {
- 	.gt-container{
- 		font-size: 90% !important;
- 	}
- }
- @media (min-width: 1200px) {
- 	.gt-container{
- 		font-size: 100% !important;
- 	}
- }
+ 
 /**
  * Generic CSS
  */
@@ -101,6 +82,7 @@
  	width: 33.33%;
  	text-align: center;
  	padding: 5px 0;
+ 	height: 50px;
  }
  .gt-usr-txt{
  	display: block;
@@ -152,7 +134,7 @@
  }
  .gt-time-str{
  	color: #666;
- 	font-size: 0.87rem;
+ 	font-size: 0.9rem;
  }
  .gt-activity{
  	padding: 10px 5px;
@@ -166,7 +148,7 @@
  .gt-activity .gt-avatar-cnt{
  	float: left;
  	width: 5%;
- 	min-width: 30px;
+ 	min-width: 35px;
  	padding-left: 5px;
  	padding-bottom: 5px;
  }
@@ -179,7 +161,7 @@
  	display: -moz-inline-stack;
  	float: left;
  	width: 91%;
- 	padding-left: 5px;
+ 	padding-left: 7px;
  }
  .gt-clearfix{
  	clear: both;
@@ -187,7 +169,7 @@
  .gt-act-cnt p{
  	margin: 2px 0px;
  	color: #666;
- 	font-size: 0.87rem;
+ 	font-size: 0.9rem;
  	overflow: hidden;
  	text-overflow: ellipsis;
  	width: 100%;
@@ -207,7 +189,7 @@
  	margin: 0;
  	padding: 0;
  	list-style-type: none;
- 	font-size: 0.75rem !important;
+ 	font-size: 0.9rem !important;
  }
  .gt-commit-item{
  	margin: 5px 0;
@@ -217,7 +199,7 @@
  	margin: 0 5px;
  }
  .gt-compare-link{
- 	font-size: 0.75rem;
+ 	font-size: 0.9rem;
  }
  .gt-scrollbar {
  	-webkit-overflow-scrolling: touch
