@@ -1,0 +1,16 @@
+{
+  "name": "Github-js",
+  "version": "0.0.1",
+  "dependencies": {
+    "jquery": "1.11.0",
+    "underscore": "1.6.0",
+    "backbone": "1.1.1",
+    "requirejs": "2.1.10",
+    "text": "requirejs-text#2.0.10",
+    "modernizr": "2.7.1",
+    "bootstrap": "3.1.1",
+    "nprogress": "~0.1.6",
+    "github-js": "*"
+  },
+  "devDependencies": {}
+}
