@@ -72,7 +72,7 @@
                             '<%= description%>'+
                           '</p>'+
                         '</div>'+
-                        '<div class="gt-usr-details">'+
+                        '<div class="gt-repo-details">'+
                           '<div class="gt-usr-repo">'+
                             '<a target="_blank" href="<%= html_url%>">'+
                             '<span class="gt-usr-txt"><%= stargazers_count%></span>'+

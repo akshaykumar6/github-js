@@ -15,7 +15,11 @@
  .gt-container a:focus, .gt-container a:hover, .gt-container a:active {
  	text-decoration: underline;
  }
- 
+ .gt-container *{
+ 	-webkit-box-sizing: border-box;
+ 	-moz-box-sizing: border-box;
+ 	box-sizing: border-box;
+ }
  .gt-container{
  	font-family: 'Source Sans Pro', sans-serif;
  	width: 100%;
@@ -75,13 +79,16 @@
  	text-decoration: underline;
  }
  .gt-usr-details{
+ 	height: 50px;
+ }
+ .gt-repo-details{
  	height: 60px;
  }
  .gt-usr-repo,.gt-usr-folwr,.gt-usr-folng{
  	float: left;
  	width: 33.33%;
  	text-align: center;
- 	padding: 5px 0;
+ 	padding-top: 5px;
  	height: 50px;
  }
  .gt-usr-txt{
@@ -90,7 +97,7 @@
  .gt-usr-dt{
  	display: block;
  }
- .gt-usr-details a{
+ .gt-usr-details a,.gt-repo-details a{
  	text-decoration: none !important;
  	color: #000;
  }
