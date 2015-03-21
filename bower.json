@@ -1,8 +1,8 @@
 {
-  "name": "github.js",
-  "main": "github.js",
+  "name": "github-js",
+  "main": "github-js",
   "version": "0.1.2",
-  "homepage": "",
+  "homepage": "http://akshaykumar6.github.io/github-js",
   "authors": [
     "Akshay Sharma <sharmakumar3092@gmail.com>"
   ],
