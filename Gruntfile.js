@@ -34,9 +34,6 @@ module.exports = function(grunt) {
         files: {
           '<%= config.dist %>/github.min.js': [
             '<%= config.src %>/github.js'
-          ],
-          '<%= config.dist %>/underscore/underscore.min.js': [
-            '<%= config.bower %>/underscore/underscore.js'
           ]
         }
       }
@@ -49,7 +46,6 @@ module.exports = function(grunt) {
   });
 
   grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-uglify');
 
