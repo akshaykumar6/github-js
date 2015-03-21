@@ -21,6 +21,7 @@
  	box-sizing: border-box;
  }
  .gt-container{
+ 	position: relative;
  	font-family: 'Source Sans Pro', sans-serif;
  	width: 100%;
  	background-color: #FFF;
@@ -30,7 +31,7 @@
  	font-size: 1rem;
  	min-width: 270px;
  }
- .gt-usr-header, .gt-org-header{
+ .gt-header{
  	position: relative;
  	width: 100%;
  	padding-top: 10px;
@@ -56,7 +57,7 @@
  	padding: 10px 20px;
  	text-align: center;
  }
- .gt-usr-header .user-name, .gt-org-header .user-name{
+ .gt-header .user-name{
  	display: block;
  	overflow: hidden;
  	width: 100%;
@@ -64,7 +65,7 @@
  	line-height: 30px;
  	text-overflow: ellipsis;
  }
- .gt-usr-header .user-login, .gt-org-header .user-login{
+ .gt-header .user-login{
  	display: block;
  	overflow: hidden;
  	width: 100%;
@@ -75,7 +76,7 @@
  	color: #666;
  	text-overflow: ellipsis;
  }
- .gt-usr-header .user-login:hover, .gt-org-header .user-login:hover{
+ .gt-header .user-login:hover{
  	text-decoration: underline;
  }
  .gt-usr-details{
@@ -275,7 +276,7 @@
  .gt-repo-lg-name:hover:before {
  	border-bottom-color: #222;
  	border-width: 5px;
- 	left: 45%;
+ 	left: 48%;
  }
  .gt-repo-lg-name:before {
  	border: solid transparent;
@@ -284,6 +285,11 @@
  	width: 0;
  	position: absolute;
  	pointer-events: none;
- 	top: 70%;
+ 	top: 75%;
  	z-index: 201;
+ }
+ .gt-loading-txt{
+ 	text-align: center;
+ 	padding: 5px 0;
+ 	color: #999;
  }
