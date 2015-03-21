@@ -1,0 +1,33 @@
+.wrapper{
+
+}
+.master-header{
+	text-align: center;
+	padding-top: 15%;
+	height: 100vh;
+}
+.project-name{
+	display: block;
+	font-size: 3.5rem;
+	margin: 20px 0;
+}
+.project-desc{
+	font-size: 1.5rem;
+	margin: 10px 0;
+}
+.project-version{
+	margin: 10px 0;
+	font-size: 1rem;
+	color: #999;
+}
+#examples .gt-container{
+	font-size: 1rem !important;
+}
+.footer{
+	margin: 20px 0;
+	text-align: center;
+	color: #777;
+}
+.wrapper .gt-container{
+	font-family: Lato,sans-serif,Arial !important;
+}
