@@ -1,5 +1,5 @@
 /*!
- * github.js - v0.1.1
+ * github.js - v0.1.2
  * Copyright (c) Akshay Sharma
  */
 
@@ -22,7 +22,7 @@
     var Github = {};
 
     // Current version of the library. Keep in sync with `package.json`
-    Github.version = '0.1.1';
+    Github.version = '0.1.2';
 
     var gitApiUrl = 'https://api.github.com/';
 
