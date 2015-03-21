@@ -1,5 +1,5 @@
 {
-  "name": "github.js",
+  "name": "githubjs",
   "version": "0.1.2",
   "description": "Javascript Plugin over Github APIs.",
   "main": "Gruntfile.js",
@@ -16,12 +16,29 @@
     "url": "https://github.com/akshaykumar6/github-js"
   },
   "keywords": [
-    "github","Javascript","API","github-js","github.js"
+    "github-js",
+    "github.js",
+    "github",
+    "Javascript",
+    "API"
   ],
-  "author": "Akshay Sharma  <sharmakumar3092@gmail.com>",
+  "author": "Akshay Sharma <sharmakumar3092@gmail.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/akshaykumar6/github-js/issues"
   },
-  "homepage": ""
+  "homepage": "http://akshaykumar6.github.io/github-js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-clean": "^0.6.0",
+    "grunt-contrib-uglify": "^0.6.0",
+    "grunt-contrib-cssmin": "^0.10.0",
+    "grunt-contrib-copy": "^0.6.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
 }
