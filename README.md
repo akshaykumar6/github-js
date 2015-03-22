@@ -29,21 +29,26 @@ $ npm install --save githubjs
 ```
 
 # Usage
- * #### User Profile
+*  **User Profile**
+
   ```javascript
   Github.userProfile({
     username: "jashkenas",
     selector: ".user-1"
   });
   ```
- * #### User Activity
+  
+*  **User Activity**
+
   ```javascript
   Github.userActivity({
     username: "torvalds",
     selector: ".user-2"
   });
   ```
- * #### Repository Profile
+  
+* **Repository Profile**
+ 
   ```javascript
   Github.repoProfile({
     username: 'atom',
@@ -51,7 +56,8 @@ $ npm install --save githubjs
     selector: '.repo-1'
   });
   ```
- * #### Repository Activity
+* **Repository Activity**
+ 
   ```javascript
   Github.repoActivity({
     username: 'joyent',
@@ -59,14 +65,18 @@ $ npm install --save githubjs
     selector: '.repo-2'
   });
   ```
- * #### Organization Profile
+  
+* **Organization Profile**
+ 
   ```javascript
   Github.orgProfile({
    orgname: 'facebook',
    selector: '.org-1'
   });
   ```
- * #### Organization Activity
+  
+* **Organization Activity**
+ 
   ```javascript
   Github.orgActivity({
    orgname: 'google',
