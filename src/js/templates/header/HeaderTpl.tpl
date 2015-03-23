@@ -11,7 +11,7 @@
   <ul class="nav navbar-nav section-menu">
     <li><a href="#home">Home</a></li>
     <li><a href="#examples">Examples</a></li>
-    <li><a href="#">Documentation</a></li>
+    <li><a href="https://github.com/akshaykumar6/github-js/wiki" target="_blank">Documentation</a></li>
     <li><a href="https://github.com/akshaykumar6/github-js" target="_blank">View on GitHub</a></li>
     <!-- <li data-menuanchor="contact"><a href="#contact">Contact</a></li> -->
     
