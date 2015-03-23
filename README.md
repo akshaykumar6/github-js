@@ -29,60 +29,61 @@ $ npm install --save githubjs
 ```
 
 # Usage
-*  **User Profile**
+### User Profile
 
-  ```javascript
-  Github.userProfile({
-    username: "jashkenas",
-    selector: ".user-1"
-  });
-  ```
+```javascript
+Github.userProfile({
+  username: "jashkenas",
+  selector: ".user-1"
+});
+```
   
-*  **User Activity**
+### User Activity
 
-  ```javascript
-  Github.userActivity({
-    username: "torvalds",
-    selector: ".user-2"
-  });
-  ```
+```javascript
+Github.userActivity({
+  username: "torvalds",
+  selector: ".user-2"
+});
+```
   
-* **Repository Profile**
+### Repository Profile
  
-  ```javascript
-  Github.repoProfile({
-    username: 'atom',
-    reponame: 'atom',
-    selector: '.repo-1'
-  });
-  ```
-* **Repository Activity**
+```javascript
+Github.repoProfile({
+  username: 'atom',
+  reponame: 'atom',
+  selector: '.repo-1'
+});
+```
+
+### Repository Activity
  
-  ```javascript
-  Github.repoActivity({
-    username: 'joyent',
-    reponame: 'node',
-    selector: '.repo-2'
-  });
-  ```
+```javascript
+Github.repoActivity({
+  username: 'joyent',
+  reponame: 'node',
+  selector: '.repo-2'
+});
+```
   
-* **Organization Profile**
+### Organization Profile
  
-  ```javascript
-  Github.orgProfile({
-   orgname: 'facebook',
-   selector: '.org-1'
-  });
-  ```
+```javascript
+Github.orgProfile({
+ orgname: 'facebook',
+ selector: '.org-1'
+});
+```
   
-* **Organization Activity**
+### Organization Activity
  
-  ```javascript
-  Github.orgActivity({
-   orgname: 'google',
-   selector: '.org-2'
-  });
-  ``` 
+```javascript
+Github.orgActivity({
+ orgname: 'google',
+ selector: '.org-2'
+});
+``` 
   
 # Documentation
  * [Complete Documentation](https://github.com/akshaykumar6/github-js/wiki)
@@ -96,7 +97,7 @@ $ cd github-js
 
 If you're not familiar with Git, visit the [Git homepage](http://git-scm.com/) to download Git for your platform.
 
-**Have a bug or a feature request? ** [Please open a new issue](https://github.com/akshaykumar6/github-js/issues).
+**Got a bug or a feature request?** [Please open a new issue](https://github.com/akshaykumar6/github-js/issues).
 
 # License
 **github-js** © 2015, Akshay Sharma Released under the [MIT License](http://mit-license.org/).
