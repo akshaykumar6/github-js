@@ -327,16 +327,22 @@
       },
 
       getData: function(url, options, callback){
-        // Utility for synchronous AJAX calls
+        // Utility for asynchronous AJAX calls
         var data, request;
         request = new XMLHttpRequest();
         request.open('GET', url, true);
-
+        // Use OAuth token if available
+        if (options.OAuth) {
+          request.setRequestHeader('Authorization', 'Token ' + options.OAuth);
+        }
+        
         request.onload = function(e) {
           if (request.status >= 200 && request.status < 400){
             data = JSON.parse(request.responseText);
             callback(data, options);
           } else {
+            // Unsuccessful request - invalid username/lost internet connectivity/exceeded rate limit/API URL not found
+            gitMethods.renderContent(gitMethods.getRenderedHTML(gitTemplates.notFoundTpl, data), options.selector,'.gt-container');
             console.error('An error occurred while connecting to GitHub API.');
           }
         };
