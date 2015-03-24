@@ -1,10 +1,4 @@
 /**
- * Fonts
- */
- @import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,900);
-
- 
-/**
  * Generic CSS
  */
 
@@ -22,7 +16,6 @@
  }
  .gt-container{
  	position: relative;
- 	font-family: 'Source Sans Pro', sans-serif;
  	width: 100%;
  	background-color: #FFF;
  	border-radius: 3px;
