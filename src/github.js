@@ -1,19 +1,18 @@
-/*!
- * github.js - v0.1.2
- * Copyright (c) Akshay Sharma
- */
+//      Github.js - v0.1.2
+
+//      © 2015, Akshay Sharma Released under the MIT License.
 
 (function (root, factory) {
 
     // Set up library appropriately for the environment
     if (typeof define === 'function' && define.amd) {
-        // Start with AMD
+        // Define for AMD
         define(['underscore'], factory);
     } else if (typeof exports === 'object') {
-        // Then for Node, CommonJS-like modules
+        // Export for Node, CommonJS-like modules
         module.exports = factory(require('underscore'));
     } else {
-        // Finally as browser globals (root is window)
+        // As browser global (root is window here)
         root.Github = factory(root._);
     }
 
@@ -24,10 +23,107 @@
     // Current version of the library. Keep in sync with `package.json`
     Github.version = '0.1.2';
 
+    // Common GitHub API URL
     var gitApiUrl = 'https://api.github.com/';
+            
+    //        userProfile - render's the github user details to selector
+    //        @param  Type - JSON -> options [username, selector]
+    
+    Github.userProfile = function (options) {
+      
+      if(options = gitMethods.initialize(options, ['username','selector'], 0)){
+        var userUrl = gitApiUrl + 'users/' + options.username;
+        gitMethods.getData(userUrl, options, gitMethods.getUserProfileHTML);
+      } else{
+        console.error("Parameters not passed correctly");
+      }
+
+    };
+
+    //        
+    //        repoProfile - render's the github repo details to selector
+    //        @param  Type - JSON -> options [username, reponame, selector]
+    //        
+    Github.repoProfile = function (options) {
+
+      if(options = gitMethods.initialize(options, ['username','selector','reponame'], 0)){
+        var repoUrl = gitApiUrl + 'repos/' + options.username +'/'+ options.reponame;
+        gitMethods.getData(repoUrl, options, gitMethods.getRepoProfileHTML);
+      } else{
+        console.error("Parameters not passed correctly");
+      }
+
+    };
+
+    //        
+    //        orgProfile - render's the github organization details to selector
+    //        @param  Type - JSON -> options [orgname, selector]
+    //        
+    Github.orgProfile = function (options) {
+      
+      if(options = gitMethods.initialize(options, ['orgname','selector'], 0)){
+        var orgUrl = gitApiUrl + 'orgs/' + options.orgname;
+        gitMethods.getData(orgUrl, options, gitMethods.getOrgProfileHTML);
+      } else{
+        console.error("Parameters not passed correctly");
+      }
+      
+    };
+
+    //        
+    //        userActivity - render's the github user activity to selector
+    //        @param  Type - JSON -> options [username, selector and limit (optional)]
+    //        
+    Github.userActivity = function (options) {
+
+      if(options = gitMethods.initialize(options, ['username','selector'], 1)){
+        var userUrl = gitApiUrl + 'users/' + options.username,
+        eventsUrl = userUrl + '/events';
+        gitMethods.getData(userUrl, options, gitMethods.getUserProfileHTML);
+        gitMethods.getData(eventsUrl, options, gitMethods.getPublicActivityHTML);
+      } else{
+        console.error("Parameters not passed correctly");
+      }
+      
+    };
+
+    //        
+    //        repoActivity - render's the github repository activity to selector
+    //        @param  Type - JSON -> options [username, reponame, selector and limit (optional)]
+    //        
+    Github.repoActivity = function (options) {
+
+      if(options = gitMethods.initialize(options, ['username','selector','reponame'], 1)){
+        var repoUrl = gitApiUrl + 'repos/' + options.username +'/'+ options.reponame,
+        eventsUrl = repoUrl + '/events';
+        gitMethods.getData(repoUrl, options, gitMethods.getRepoProfileHTML);
+        gitMethods.getData(eventsUrl, options, gitMethods.getPublicActivityHTML);
+      } else{
+        console.error("Parameters not passed correctly");
+      }
+
+    };
+
+    //        
+    //        orgActivity - render's the github organization activity to selector
+    //        @param  Type - JSON -> options [orgname, selector and limit (optional)]
+    //        
+    Github.orgActivity = function (options) {
+
+      if(options = gitMethods.initialize(options, ['orgname','selector'], 1)){
+        var orgUrl = gitApiUrl + 'orgs/' + options.orgname,
+        eventsUrl = orgUrl + '/events';
+        gitMethods.getData(orgUrl, options, gitMethods.getOrgProfileHTML);
+        gitMethods.getData(eventsUrl, options, gitMethods.getPublicActivityHTML);
+      } else{
+        console.error("Parameters not passed correctly");
+      }
+
+    };
 
     // Underscore templates for profiles, activities, etc.
     var gitTemplates = {
+      // Parent container template
       parentTpl: '<div class="gt-container">'+
                           '<div class="gt-header gt-shadow">'+
                             '<div class="gt-loading-txt">Loading..</div>'+
@@ -36,6 +132,7 @@
                             '<div class="gt-loading-txt">Loading..</div>'+
                           '</div><%}%>'+
                          '</div>',
+      // User profile template
       userProfileTpl:   '<div class="gt-usr-avatar">'+
                           '<a target="_blank" href="<%= html_url%>">'+
                             '<div class="gt-usr-img" style="background-image: url(<%= avatar_url%>)"> </div>'+
@@ -67,7 +164,7 @@
                             '</a>'+
                           '</div>'+
                         '</div>',
-
+      // Repository profile template
       repoProfileTpl:   '<div class="gt-usr-name">'+
                           '<span class="user-name"><%= name%></span>'+
                           '<a target="_blank" href="<%= owner.html_url%>">'+
@@ -99,7 +196,7 @@
                           '<div class="gt-repo-lg-stat">'+
                           '</div>'+
                         '</div>',
-
+      // Organization profile template
       orgProfileTpl:    '<div class="gt-org-avatar">'+
                           '<a target="_blank" href="<%= html_url%>">'+
                             '<div class="gt-org-img" style="background-image: url(<%= avatar_url%>)"> </div>'+
@@ -116,6 +213,7 @@
                           '<br><span class="gt-org-repos"><%= public_repos%></span>'+
                           '<span class="gt-org-repos"> Public Repositories</span>'+
                         '</div>',
+      // Parent activity container template
       gitActivityTpl: '<div class="gt-activity <%=type%>">'+
                           '<div class="gt-avatar-cnt">'+
                             '<a target="_blank" href="https://github.com/<%= actor.login%>">'+
@@ -128,6 +226,7 @@
                           '</div>'+
                           '<div class="gt-clearfix"></div>'+
                       '</div>',
+      // Activity templates keyed with activity type
       CommitCommentEvent:'<span> commented on commit <%= commentLink%> </span>'+
                          '<p><%= payload.comment.body%></p>',
       CreateEvent: '<span> created <%= payload.ref_type%> <%= branchLink%> at <%= repoLink%> </span>',
@@ -159,16 +258,18 @@
                      '</div>'
     };
 
-
+    // Object for locally used methods
     var gitMethods = {
-
+      // Check variables and render base template
       initialize: function(options, variables, type){
         // Validate varaibles
         for (var i = 0; i < variables.length; i++) {
           if(!options[variables[i]])
             return false;
         }
-        // Render base template
+        // Type - 0 - only profile
+        
+        // Type - 1 - profile and acitivity feed
         gitMethods.renderContent(gitMethods.getRenderedHTML(gitTemplates['parentTpl'],{
           type: type
         }),options.selector);
@@ -178,16 +279,16 @@
         return options;
       },
 
+      // Check if value is integer
       checkInteger: function (value) {
-        // Check if value is integer
         if (value === parseInt(value, 10))
           return true;
         else 
           return false;
       },
 
+      // Get the rendered template with data
       getRenderedHTML: function (template, data) {
-        // Get the rendered template with data
         if (data) {
           return _.template(template)(data);
         } else{
@@ -195,29 +296,29 @@
         }
       },
 
+      // Render User profile HTML
       getUserProfileHTML: function (data, options){
-        // Render User profile HTML
         gitMethods.renderContent(gitMethods.getRenderedHTML(gitTemplates.userProfileTpl, data), options.selector,'.gt-header');
       },
 
+      // Render the repository profile HTML with language stats
       getRepoProfileHTML: function (data, options){
-        // Render the repository profile HTML with language stats
         var languageUrl = gitApiUrl + 'repos/' + options.username +'/'+ options.reponame + '/languages';
-
+        // Render template
         gitMethods.renderContent(gitMethods.getRenderedHTML(gitTemplates.repoProfileTpl, data), options.selector,'.gt-header');
-
-        // Get language stat for repo
+        // Fetch language stat for repo
         gitMethods.getData(languageUrl, options, gitMethods.getLanguageHTML);
       },
 
+      // Render organization profile HTML
       getOrgProfileHTML: function (data, options){
-        // Render organization profile HTML
         gitMethods.renderContent(gitMethods.getRenderedHTML(gitTemplates.orgProfileTpl, data), options.selector,'.gt-header');
       },
 
+      // Render recent public activities of user/repo/organization
       getPublicActivityHTML: function (data,options) {
-        // Get all the public activities of user/repo/organization
         var html = '';
+        // Get min of limit of data size
         var length = (options.limit < data.length)? options.limit : data.length;
         
         if (length==0) {
@@ -287,30 +388,31 @@
 
           }
         }
-        
+        // Render created activity HTML to DOM
         gitMethods.renderContent(html, options.selector, '.gt-activity-cnt');
       },
 
+      // Form HTML for commits in PushEvent
       getCommitsHTML: function(activity){
-          // Form HTML for commits in PushEvent
-          var html = '<ul class="gt-commit-list">';
-          var liElement, shaLink, commitMessage,  commit, index,
+          var html = '<ul class="gt-commit-list">',
+          liElement, shaLink, commitMessage,  commit, index,
           compareLink = '',
           payload = activity.payload,
           length = payload.commits.length,
           shaDiff = payload.before + '...' + payload.head;
           
+          // Get links for 2 or less commit
           for(index = 0; index < length; index++){
-                // Get links for 2 or less commit
-                if (index>1) break;
-                commit = payload.commits[index];
-                liElement = '<li class="gt-commit-item" >';
-                shaLink = gitMethods.getGitHubLink(activity.repo.name + '/commit/' + commit.sha, commit.sha.substring(0, 6));
-                commitMessage = '<span class="gt-commit-msg">' + commit.message.substring(0,150) + '</span>';
-                liElement += shaLink 
-                liElement += commitMessage;
-                liElement += '</li>'
-                html += liElement;
+            if (index>1) break;
+            commit = payload.commits[index];
+            // Create commit li element
+            liElement = '<li class="gt-commit-item" >';
+            shaLink = gitMethods.getGitHubLink(activity.repo.name + '/commit/' + commit.sha, commit.sha.substring(0, 6));
+            commitMessage = '<span class="gt-commit-msg">' + commit.message.substring(0,150) + '</span>';
+            liElement += shaLink 
+            liElement += commitMessage;
+            liElement += '</li>'
+            html += liElement;
           }
           
           // Get the diff link between commits
@@ -326,8 +428,8 @@
           return html;
       },
 
+      // Utility for asynchronous AJAX calls
       getData: function(url, options, callback){
-        // Utility for asynchronous AJAX calls
         var data, request;
         request = new XMLHttpRequest();
         request.open('GET', url, true);
@@ -341,7 +443,7 @@
             data = JSON.parse(request.responseText);
             callback(data, options);
           } else {
-            // Unsuccessful request - invalid username/lost internet connectivity/exceeded rate limit/API URL not found
+            // Unsuccessful request - invalid username/ lost internet connectivity/ exceeded rate limit/ API URL not found
             gitMethods.renderContent(gitMethods.getRenderedHTML(gitTemplates.notFoundTpl, data), options.selector,'.gt-container');
             console.error('An error occurred while connecting to GitHub API.');
           }
@@ -354,8 +456,8 @@
         request.send();
       },
 
+      // Get anchor tag HTML for URL
       getLink: function(url, title, cssClass) {
-        // Get anchor tag HTML for URL
         if (!title)
           title = url;
         if (typeof(cssClass) === 'undefined')
@@ -363,8 +465,8 @@
         return gitMethods.getRenderedHTML('<a class="' + cssClass + '" href="<%=url%>" target="_blank"><%=title%></a>', { url: url, title: title });
       },
 
+      // Get anchor tag HTML for non-github URL
       getGitHubLink: function(url, title, cssClass) {
-        // Get anchor tag HTML for non-github URL
         if (!title)
           title = url;
         if (typeof(cssClass) === 'undefined')
@@ -372,17 +474,17 @@
         return gitMethods.getLink('https://github.com/' + url, title, cssClass);
       },
 
+      //  Only for plurals ending with 's'. Yeah! this sucks. 
       getPluralWord: function (count, word) {
-        //  Only for plurals ending with 's' 
         if (count !== 1) return word + 's';
         return word;
       },
 
+      // Get repository language stat HTML
       getLanguageHTML: function(data, options){
-        // Get repository language stat HTML
         var languageData = [], sum = 0,
         percentage, languageHtml = '';
-
+        // Get total size and create array which can be sorted by value
         _.each(data, function(value, key){ 
             var data = {};
             data.language = key;
@@ -394,24 +496,24 @@
         // Sort languages by usage in repo 
         languageData = languageData.sort(function(a, b){return b.size - a.size});
 
+        // Get HTML for each language
         _.each(languageData, function(element){
-            // Get HTML for each language
             percentage = (parseInt(element.size)/sum*100).toFixed(1);
             languageHtml +='<div class="gt-repo-lg-cnt" style="width: '+ percentage +'%; background: #'+ gitMethods.getRandomColor() +'; " >'+
                    ' <div class="gt-repo-lg-name" data-title="'+ element.language +' ('+ percentage +'%)"> </div> </div>';
         });
         
-        // Render HTML to the container
+        // Render language HTML to the container
         gitMethods.renderContent(languageHtml, options.selector,'.gt-repo-lg-stat');
       },
 
+      // Get random HEX code for color
       getRandomColor: function(){
-        // Get random HEX code for color
         return Math.random().toString(16).substring(2, 8);
       },
 
+      // Convert milliseconds to time string
       millisecondsToStr: function(milliseconds) {
-        // Convert milliseconds to time string
         function numberEnding(number) {
           return (number > 1) ? 's ago' : ' ago';
         }
@@ -438,8 +540,8 @@
         return 'just now';
       },
 
+      // Render the content to the selector or subSelector
       renderContent: function(content, selector, subSelector){
-        // render the content to the selector
         var selectorDivs = document.querySelectorAll(selector);
         
         for (var i = 0; i < selectorDivs.length; i++) {
@@ -454,8 +556,8 @@
         
       },
 
+      // Set render limit for activities - default is 30
       setLimit: function(value){
-        // Set render limit for activities - default is 30
         var limit;
         if (value !== 'undefined' && gitMethods.checkInteger(limit = parseInt(value, 10))) {
           limit = (limit>30)?30:limit;
@@ -467,101 +569,6 @@
 
     };
 
-    /**
-     * userProfile - render's the github user details to selector
-     * @param  {[JSON]} options [username, selector]
-     */
-    Github.userProfile = function (options) {
-      
-      if(options = gitMethods.initialize(options, ['username','selector'], 0)){
-        var userUrl = gitApiUrl + 'users/' + options.username;
-        gitMethods.getData(userUrl, options, gitMethods.getUserProfileHTML);
-      } else{
-        console.error("Parameters not passed correctly");
-      }
-
-    };
-
-    /**
-     * repoProfile - render's the github repo details to selector
-     * @param  {[JSON]} options [username, reponame, selector]
-     */
-    Github.repoProfile = function (options) {
-
-      if(options = gitMethods.initialize(options, ['username','selector','reponame'], 0)){
-        var repoUrl = gitApiUrl + 'repos/' + options.username +'/'+ options.reponame;
-        gitMethods.getData(repoUrl, options, gitMethods.getRepoProfileHTML);
-      } else{
-        console.error("Parameters not passed correctly");
-      }
-
-    };
-
-    /**
-     * orgProfile - render's the github organization details to selector
-     * @param  {[JSON]} options [orgname, selector]
-     */
-    Github.orgProfile = function (options) {
-      
-      if(options = gitMethods.initialize(options, ['orgname','selector'], 0)){
-        var orgUrl = gitApiUrl + 'orgs/' + options.orgname;
-        gitMethods.getData(orgUrl, options, gitMethods.getOrgProfileHTML);
-      } else{
-        console.error("Parameters not passed correctly");
-      }
-      
-    };
-
-    /**
-     * userActivity - render's the github user activity to selector
-     * @param  {[JSON]} options [username, selector and limit (optional)]
-     */
-    Github.userActivity = function (options) {
-
-      if(options = gitMethods.initialize(options, ['username','selector'], 1)){
-        var userUrl = gitApiUrl + 'users/' + options.username,
-        eventsUrl = userUrl + '/events';
-        gitMethods.getData(userUrl, options, gitMethods.getUserProfileHTML);
-        gitMethods.getData(eventsUrl, options, gitMethods.getPublicActivityHTML);
-      } else{
-        console.error("Parameters not passed correctly");
-      }
-      
-    };
-
-    /**
-     * repoActivity - render's the github repository activity to selector
-     * @param  {[JSON]} options [username, reponame, selector and limit (optional)]
-     */
-    Github.repoActivity = function (options) {
-
-      if(options = gitMethods.initialize(options, ['username','selector','reponame'], 1)){
-        var repoUrl = gitApiUrl + 'repos/' + options.username +'/'+ options.reponame,
-        eventsUrl = repoUrl + '/events';
-        gitMethods.getData(repoUrl, options, gitMethods.getRepoProfileHTML);
-        gitMethods.getData(eventsUrl, options, gitMethods.getPublicActivityHTML);
-      } else{
-        console.error("Parameters not passed correctly");
-      }
-
-    };
-
-    /**
-     * orgActivity - render's the github organization activity to selector
-     * @param  {[JSON]} options [orgname, selector and limit (optional)]
-     */
-    Github.orgActivity = function (options) {
-
-      if(options = gitMethods.initialize(options, ['orgname','selector'], 1)){
-        var orgUrl = gitApiUrl + 'orgs/' + options.orgname,
-        eventsUrl = orgUrl + '/events';
-        gitMethods.getData(orgUrl, options, gitMethods.getOrgProfileHTML);
-        gitMethods.getData(eventsUrl, options, gitMethods.getPublicActivityHTML);
-      } else{
-        console.error("Parameters not passed correctly");
-      }
-
-    };
 
     return Github;
 }));
