@@ -1,4 +1,4 @@
-//      Github.js - v0.1.2
+//      Github.js - v0.1.3
 
 //      © 2015, Akshay Sharma Released under the MIT License.
 
@@ -21,7 +21,7 @@
     var Github = {};
 
     // Current version of the library. Keep in sync with `package.json`
-    Github.version = '0.1.2';
+    Github.version = '0.1.3';
 
     // Common GitHub API URL
     var gitApiUrl = 'https://api.github.com/';
