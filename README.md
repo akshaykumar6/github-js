@@ -87,6 +87,7 @@ Github.orgActivity({
   
 # Documentation
  * [Complete Documentation](https://github.com/akshaykumar6/github-js/wiki)
+ * [Annotated Source Code](http://akshaykumar6.github.io/github-js/docs/github.html)
 
 # Contribute
  To start contributing to Github.js, clone the repository and start playing.
