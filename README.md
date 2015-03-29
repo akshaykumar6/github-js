@@ -4,7 +4,7 @@ Github.js is a JavaScript plugin over [GitHub APIs v3](https://developer.github.
 
 # Demo
 
-[Click here](http://akshaykumar6.github.io/github-js) for live demo.
+[Click here](http://akshaykumar6.github.io/github-js) for live examples.
 
 #Dependency
 
