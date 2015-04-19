@@ -12,7 +12,7 @@ The plugin has hard dependency on [underscore.js](http://underscorejs.org/)(~v1.
 
 # Installation
 
-Add **github.js** and **github.css** to your project. [Download](https://github.com/akshaykumar6/github-js/archive/master.zip).
+Add **github.js** and **github.css** to your project. [Download v0.1.3](https://github.com/akshaykumar6/github-js/archive/v0.1.3.zip).
 
 ```html
 <link rel='stylesheet' href='github.css'/>
