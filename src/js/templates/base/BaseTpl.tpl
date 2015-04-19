@@ -8,8 +8,8 @@
 		<p class="project-desc">
 			Easy way to feature open source contributions on your website or portfolio.
 		</p>
-		<a class="btn btn-primary" href="https://github.com/akshaykumar6/github-js/archive/master.zip">
-			Download Github.js
+		<a class="btn btn-primary" href="https://github.com/akshaykumar6/github-js/archive/v0.1.3.zip">
+			Download v0.1.3
 		</a>
 		
 	</div>

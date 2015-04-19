@@ -51,7 +51,7 @@ define([
         onUsernameChangeEvent: function (e) {
             e.preventDefault();
             if (e.keyCode==13) {
-                var guestname = $('.gthub-username').val();
+                var guestname = _.escape($('.gthub-username').val());
                 Github.userProfile({
                     username: guestname,
                     selector: ".user-1"
@@ -67,7 +67,7 @@ define([
         onOrgnameChangeEvent: function (e) {
             e.preventDefault();
             if (e.keyCode==13) {
-                var guestname = $('.gthub-orgname').val();
+                var guestname = _.escape($('.gthub-orgname').val());
                 Github.orgProfile({
                     orgname: guestname,
                     selector: ".org-1"
