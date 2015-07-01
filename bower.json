@@ -13,7 +13,6 @@
   "license": "MIT",
   "private": false,
   "ignore": [
-    "src",
     ".gitignore"
   ],
   "dependencies": {
