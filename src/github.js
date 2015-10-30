@@ -262,14 +262,14 @@
     var gitMethods = {
       // Check variables and render base template
       initialize: function(options, variables, type){
-        // Validate varaibles
+        // Validate variables
         for (var i = 0; i < variables.length; i++) {
           if(!options[variables[i]])
             return false;
         }
         // Type - 0 - only profile
         
-        // Type - 1 - profile and acitivity feed
+        // Type - 1 - profile and activity feed
         gitMethods.renderContent(gitMethods.getRenderedHTML(gitTemplates['parentTpl'],{
           type: type
         }),options.selector);
