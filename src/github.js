@@ -25,12 +25,12 @@
 
     // Common GitHub API URL
     var gitApiUrl = 'https://api.github.com/';
-            
+
     //        userProfile - render's the github user details to selector
     //        @param  Type - JSON -> options [username, selector]
-    
+
     Github.userProfile = function (options) {
-      
+
       if(options = gitMethods.initialize(options, ['username','selector'], 0)){
         var userUrl = gitApiUrl + 'users/' + options.username;
         gitMethods.getData(userUrl, options, gitMethods.getUserProfileHTML);
@@ -40,10 +40,10 @@
 
     };
 
-    //        
+    //
     //        repoProfile - render's the github repo details to selector
     //        @param  Type - JSON -> options [username, reponame, selector]
-    //        
+    //
     Github.repoProfile = function (options) {
 
       if(options = gitMethods.initialize(options, ['username','selector','reponame'], 0)){
@@ -55,25 +55,25 @@
 
     };
 
-    //        
+    //
     //        orgProfile - render's the github organization details to selector
     //        @param  Type - JSON -> options [orgname, selector]
-    //        
+    //
     Github.orgProfile = function (options) {
-      
+
       if(options = gitMethods.initialize(options, ['orgname','selector'], 0)){
         var orgUrl = gitApiUrl + 'orgs/' + options.orgname;
         gitMethods.getData(orgUrl, options, gitMethods.getOrgProfileHTML);
       } else{
         console.error("Parameters not passed correctly");
       }
-      
+
     };
 
-    //        
+    //
     //        userActivity - render's the github user activity to selector
     //        @param  Type - JSON -> options [username, selector and limit (optional)]
-    //        
+    //
     Github.userActivity = function (options) {
 
       if(options = gitMethods.initialize(options, ['username','selector'], 1)){
@@ -84,13 +84,13 @@
       } else{
         console.error("Parameters not passed correctly");
       }
-      
+
     };
 
-    //        
+    //
     //        repoActivity - render's the github repository activity to selector
     //        @param  Type - JSON -> options [username, reponame, selector and limit (optional)]
-    //        
+    //
     Github.repoActivity = function (options) {
 
       if(options = gitMethods.initialize(options, ['username','selector','reponame'], 1)){
@@ -104,10 +104,10 @@
 
     };
 
-    //        
+    //
     //        orgActivity - render's the github organization activity to selector
     //        @param  Type - JSON -> options [orgname, selector and limit (optional)]
-    //        
+    //
     Github.orgActivity = function (options) {
 
       if(options = gitMethods.initialize(options, ['orgname','selector'], 1)){
@@ -268,12 +268,12 @@
             return false;
         }
         // Type - 0 - only profile
-        
+
         // Type - 1 - profile and acitivity feed
         gitMethods.renderContent(gitMethods.getRenderedHTML(gitTemplates['parentTpl'],{
           type: type
         }),options.selector);
-        
+
         // Set limit value
         options.limit = gitMethods.setLimit(options.limit);
         return options;
@@ -283,7 +283,7 @@
       checkInteger: function (value) {
         if (value === parseInt(value, 10))
           return true;
-        else 
+        else
           return false;
       },
 
@@ -320,11 +320,11 @@
         var html = '';
         // Get min of limit of data size
         var length = (options.limit < data.length)? options.limit : data.length;
-        
+
         if (length==0) {
           // If no activity in last 90 days
           html += gitMethods.getRenderedHTML(gitTemplates['noActivityTpl']);
-        } 
+        }
         else{
           // Loop over all the activities
           for(var index = 0; index < length; index++){
@@ -335,7 +335,7 @@
             activity.timeString = gitMethods.millisecondsToStr(new Date() - new Date(activity.created_at));
             activity.userLink = gitMethods.getGitHubLink(activity.actor.login, activity.actor.login);
             activity.repoLink = gitMethods.getGitHubLink(activity.repo.name, activity.repo.name);
-            
+
             // Get the branch name
             activity.branchLink = '';
             if (payload.ref) {
@@ -351,7 +351,7 @@
             switch(activity.type){
               case 'CommitCommentEvent': activity.commentLink = gitMethods.getLink(payload.comment.html_url, activity.repo.name + '@' +payload.comment.commit_id.substring(0,6));
                                   break;
-              case 'CreateEvent': 
+              case 'CreateEvent':
                                   break;
               case 'DeleteEvent':
                                   break;
@@ -379,7 +379,7 @@
               case 'ReleaseEvent': activity.tagLink = gitMethods.getLink(payload.release.html_url, payload.release.tag_name);
                                    activity.zipLink = gitMethods.getLink(payload.release.zipball_url, 'Download Source Code (zip)')
                                   break;
-              case 'WatchEvent':  
+              case 'WatchEvent':
                                   break;
             }
             // Get activity specific message
@@ -400,7 +400,7 @@
           payload = activity.payload,
           length = payload.commits.length,
           shaDiff = payload.before + '...' + payload.head;
-          
+
           // Get links for 2 or less commit
           for(index = 0; index < length; index++){
             if (index>1) break;
@@ -409,12 +409,12 @@
             liElement = '<li class="gt-commit-item" >';
             shaLink = gitMethods.getGitHubLink(activity.repo.name + '/commit/' + commit.sha, commit.sha.substring(0, 6));
             commitMessage = '<span class="gt-commit-msg">' + commit.message.substring(0,150) + '</span>';
-            liElement += shaLink 
+            liElement += shaLink
             liElement += commitMessage;
             liElement += '</li>'
             html += liElement;
           }
-          
+
           // Get the diff link between commits
           if (length === 2) {
             compareLink = gitMethods.getGitHubLink(activity.repo.name + '/compare/' + shaDiff, 'View comparison for these 2 commits &raquo;','gt-compare-link');
@@ -424,7 +424,7 @@
 
           html += '</ul>'
           html += compareLink;
-          
+
           return html;
       },
 
@@ -437,7 +437,7 @@
         if (options.OAuth) {
           request.setRequestHeader('Authorization', 'Token ' + options.OAuth);
         }
-        
+
         request.onload = function(e) {
           if (request.status >= 200 && request.status < 400){
             data = JSON.parse(request.responseText);
@@ -449,10 +449,10 @@
           }
         };
 
-        request.onerror = function(e) { 
-          console.error('An error occurred while connecting to GitHub API.'); 
+        request.onerror = function(e) {
+          console.error('An error occurred while connecting to GitHub API.');
         };
-        
+
         request.send();
       },
 
@@ -474,7 +474,7 @@
         return gitMethods.getLink('https://github.com/' + url, title, cssClass);
       },
 
-      //  Only for plurals ending with 's'. Yeah! this sucks. 
+      //  Only for plurals ending with 's'. Yeah! this sucks.
       getPluralWord: function (count, word) {
         if (count !== 1) return word + 's';
         return word;
@@ -485,15 +485,15 @@
         var languageData = [], sum = 0,
         percentage, languageHtml = '';
         // Get total size and create array which can be sorted by value
-        _.each(data, function(value, key){ 
+        _.each(data, function(value, key){
             var data = {};
             data.language = key;
             data.size = value;
             languageData.push(data);
-            sum += value; 
+            sum += value;
         });
 
-        // Sort languages by usage in repo 
+        // Sort languages by usage in repo
         languageData = languageData.sort(function(a, b){return b.size - a.size});
 
         // Get HTML for each language
@@ -502,7 +502,7 @@
             languageHtml +='<div class="gt-repo-lg-cnt" style="width: '+ percentage +'%; background: #'+ gitMethods.getRandomColor() +'; " >'+
                    ' <div class="gt-repo-lg-name" data-title="'+ element.language +' ('+ percentage +'%)"> </div> </div>';
         });
-        
+
         // Render language HTML to the container
         gitMethods.renderContent(languageHtml, options.selector,'.gt-repo-lg-stat');
       },
@@ -543,7 +543,7 @@
       // Render the content to the selector or subSelector
       renderContent: function(content, selector, subSelector){
         var selectorDivs = document.querySelectorAll(selector);
-        
+
         for (var i = 0; i < selectorDivs.length; i++) {
           // if subSelector is passed, find it
           if (subSelector) {
@@ -553,7 +553,7 @@
           }
           selectorDiv.innerHTML = content;
         }
-        
+
       },
 
       // Set render limit for activities - default is 30
