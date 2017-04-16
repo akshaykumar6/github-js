@@ -6,7 +6,7 @@ Github.js is a JavaScript plugin over [GitHub APIs v3](https://developer.github.
 
 [Click here](http://akshaykumar6.github.io/github-js) for live examples.
 
-#Dependency
+# Dependency
 
 The plugin has hard dependency on [underscore.js](http://underscorejs.org/)(~v1.6.0). You can download it from [here](https://github.com/jashkenas/underscore/archive/1.6.0.zip).
 
