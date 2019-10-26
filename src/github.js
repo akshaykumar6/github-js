@@ -320,6 +320,7 @@
         var html = '';
         // Get min of limit of data size
         var length = (options.limit < data.length)? options.limit : data.length;
+        var repo_blacklist = options.repo_blacklist ? options.repo_blacklist : [];
         
         if (length==0) {
           // If no activity in last 90 days
@@ -330,6 +331,11 @@
           for(var index = 0; index < length; index++){
             var activity = data[index];
             var payload = activity.payload;
+
+            if (repo_blacklist.indexOf(activity.repo.name) != -1) {
+              // Continue to the next element
+              continue;
+            }
 
             // Get attributes common to all activities
             activity.timeString = gitMethods.millisecondsToStr(new Date() - new Date(activity.created_at));
